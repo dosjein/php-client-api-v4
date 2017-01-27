@@ -39,7 +39,7 @@ class Single extends Response
      */
     public function __call($method, $arguments)
     {
-        $methods = array("delete", "save" , 'create');
+        $methods = array("delete", "save");
         if (!$this->connection instanceof ConnectionFaker) {
             if (!in_array($method, $methods)) {
                 throw new ClusterpointException("\"->{$method}()\" method: does not exist.", 9002);
@@ -108,12 +108,14 @@ class Single extends Response
      */
     public function save()
     {
+
         if (!isset($this->_id)){
             $this->_id = $this->id;
-            return QueryParser::insertOne($this , $this, $this->connection); 
+            return QueryParser::insertOne($this , $this->connection);
         }else{
-            return parent::save();
+            return QueryParser::replace($this->_id, $this, $this->connection);
         }
+
     }
 
     /**
