@@ -106,10 +106,10 @@ class Single extends Response
      *
      * @return \Clusterpoint\Response\Single
      */
-    public function save()
+    public function save($new = false)
     {
 
-        if (!isset($this->_id)){
+        if ($new){
             $this->_id = md5(rand(1, 999999999999999999).date('dmyhis'));
             return QueryParser::insertOne((object) $this->toArray() , $this->connection);
         }else{
