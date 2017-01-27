@@ -39,7 +39,7 @@ class Single extends Response
      */
     public function __call($method, $arguments)
     {
-        $methods = array("delete", "save");
+        $methods = array("delete", "save" , 'create');
         if (!$this->connection instanceof ConnectionFaker) {
             if (!in_array($method, $methods)) {
                 throw new ClusterpointException("\"->{$method}()\" method: does not exist.", 9002);
@@ -73,23 +73,23 @@ class Single extends Response
         $this->scope->results[$key] = $value;
     }
 
-	public function __isset($name)
-	{
-		return isset($this->scope->results[$name]);
-	}
+    public function __isset($name)
+    {
+        return isset($this->scope->results[$name]);
+    }
 
-	public function __unset($name)
-	{
-		unset($this->scope->results[$name]);
-	}
+    public function __unset($name)
+    {
+        unset($this->scope->results[$name]);
+    }
 
-	public function __debugInfo()
-	{
-		if (!is_array($this->scope->results)){
-			return [$this->scope->results];
-		}
-		return $this->scope->results;
-	}
+    public function __debugInfo()
+    {
+        if (!is_array($this->scope->results)){
+            return [$this->scope->results];
+        }
+        return $this->scope->results;
+    }
 
     /**
      * Returns Connection access points
@@ -108,7 +108,12 @@ class Single extends Response
      */
     public function save()
     {
-        return QueryParser::replace($this->_id, $this, $this->connection);
+        if (!isset($this->_id)){
+            $this->_id = $this->id;
+            return QueryParser::insertOne($this , $this, $this->connection); 
+        }else{
+            return parent::save();
+        }
     }
 
     /**
