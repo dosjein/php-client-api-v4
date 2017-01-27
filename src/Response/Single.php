@@ -110,7 +110,7 @@ class Single extends Response
     {
 
         if (!isset($this->_id)){
-            $this->_id = $this->id;
+            $this->_id = rand(1, 999999999999999999);
             return QueryParser::insertOne($this , $this->connection);
         }else{
             return QueryParser::replace($this->_id, $this, $this->connection);
