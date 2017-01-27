@@ -110,7 +110,7 @@ class Single extends Response
     {
 
         if (!isset($this->_id)){
-            $this->_id = rand(1, 999999999999999999);
+            $this->_id = md5(rand(1, 999999999999999999).date('dmyhis'));
             return QueryParser::insertOne((object) $this->toArray() , $this->connection);
         }else{
             return QueryParser::replace($this->_id, $this, $this->connection);
